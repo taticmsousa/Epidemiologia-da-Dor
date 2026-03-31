@@ -1,0 +1,73 @@
+---
+title: "Artigo: A melhora da depressão reduz a interferência da dor crônica na vida diária"
+author: "Prof. Tatiane Moraes - Institute of Social Medicine/UERJ"
+format: html
+editor: visual
+---
+
+## Introdução
+
+Este documento consolida a formatação e revisão do banco de dados de pacientes da Clínica da Dor do Hospital Universitário Pedro Ernesto - HUPE da UERJ. Este banco de dados é composto por pacientes que finalizaram o Programa de Autogerenciamento da Dor Crônica (PADC) promovido por equipe multidisciplar da Clínica da Dor.
+
+O banco e as análises aqui apresentadas têm como objetivo identificar o papel da melhora da depressão na melhora da intensidade e da interferencia da dor e integram a dissertação de mestrado e artigo liderado por Paula Assunção.
+
+## Consolidação do Banco de Dados
+
+Baixar banco de pacientes que finalizaram de modo presencial o PADC. As variáveis que compoem o banco e que são de interesse deste projeto são:
+
+1.  **Variáveis Resposta**
+
+**Melhora da intensidade da dor:**
+
+Estimada a partir dos resultados do Inventário Breve de Dor (BPI), considerando a diferenca entre o score obtido no momento basal e na reavaliação, após o PADC, onde a redução de dois pontos ou mais indica melhora na intensidade da dor, ou seja:
+
+-   Não houve melhora da intensidade da dor: 0 (diferença \<2)
+
+-   Houve melhora da intensidade da dor: 1 (diferença \> ou = 2)
+
+**Melhora da interferência da dor:**
+
+Estimada a partir dos resultados do Inventário Breve de Dor (BPI), considerando a diferenca entre o score obtido no momento basal e na reavaliação, após o PADC, onde a redução de dois pontos ou mais indica melhora na interferência da dor, ou seja:
+
+-   Não houve melhora da intenferência da dor: 0 (diferença \<2)
+
+-   Houve melhora da interferência da dor: 1 (diferença \> ou = 2)
+
+2.  **Variável explicativa:**
+
+**Melhora da depressão:**
+
+Estimada através da diferença entre o score obtido no momento basal e no momento de reavaliação. Foram considerados deprimidos os pacientes cujo score era igual ou superior a XX. Assim, foram identificados e categorizados os seguintes grupos:
+
+Grupo 1 - Pacientes sem depressão no momento basal e na reavaliação
+
+Grupo 2 - Pacientes com depressão no momento basal que apresentaram remissão na reavaliação
+
+Grupo 3 - Pacientes com depressão persistente (com depressão no momento basal que não melhoraram da depressão na reavaliação)
+
+Grupo 4 - Pacientes não deprimidos no momento basal e deprimidos na realiação\
+
+3.  **Varáveis de Controle:**
+
+**Faixa etária**: 18 a 39, 40 a 59 e maiores de 60 anos
+
+**Sexo**: Masculino e feminino
+
+**IMC**: normal: ≥ 17 a \< 25 kg/m²; sobrepeso: ≥ 25 a \< 30 kg/m²; e obesidade ≥ 30 kg/m²
+
+**Uso de antidepressivos**: Sim e Nao
+
+###A PARTIR DAQUI VOU ATUALIZAR O BANCO E AS ANALISES
+
+```{r}
+1 + 1
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
