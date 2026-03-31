@@ -1,0 +1,116 @@
+---
+title: "Artigo: A melhora da depressão reduz a interferência da dor crônica na vida diária"
+author: "Prof. Tatiane Moraes - Institute of Social Medicine/UERJ"
+format: html
+editor: visual
+---
+
+## Introdução
+
+Este documento consolida a formatação e revisão do banco de dados de pacientes da Clínica da Dor do Hospital Universitário Pedro Ernesto - HUPE da UERJ. Este banco de dados é composto por pacientes que finalizaram o Programa de Autogerenciamento da Dor Crônica (PADC) promovido por equipe multidisciplar da Clínica da Dor.
+
+O banco e as análises aqui apresentadas têm como objetivo identificar o papel da melhora da depressão na melhora da intensidade e da interferencia da dor e integram a dissertação de mestrado e artigo liderado por Paula Assunção.
+
+## Consolidação do Banco de Dados
+
+### Descrição das variáveis
+
+As variáveis que compoem o banco e que são de interesse deste projeto são:
+
+1.  **Variáveis Resposta**
+
+**Melhora da intensidade da dor:**
+
+Estimada a partir dos resultados do Inventário Breve de Dor (BPI), considerando a diferenca entre o score obtido no momento basal e na reavaliação, após o PADC, onde a redução de dois pontos ou mais indica melhora na intensidade da dor, ou seja:
+
+-   Não houve melhora da intensidade da dor: 0 (diferença \<2)
+
+-   Houve melhora da intensidade da dor: 1 (diferença \> ou = 2)
+
+**Melhora da interferência da dor:**
+
+Estimada a partir dos resultados do Inventário Breve de Dor (BPI), considerando a diferenca entre o score obtido no momento basal e na reavaliação, após o PADC, onde a redução de dois pontos ou mais indica melhora na interferência da dor, ou seja:
+
+-   Não houve melhora da intenferência da dor: 0 (diferença \<2)
+
+-   Houve melhora da interferência da dor: 1 (diferença \> ou = 2)
+
+2.  **Variável explicativa:**
+
+**Melhora da depressão:**
+
+Estimada através da diferença entre o score obtido no momento basal e no momento de reavaliação. Foram considerados deprimidos os pacientes cujo score era igual ou superior a 11. Assim, foram identificados e categorizados os seguintes grupos:
+
+Grupo 1 - Pacientes sem depressão no momento basal e na reavaliação
+
+Grupo 2 - Pacientes com depressão no momento basal que apresentaram remissão na reavaliação
+
+Grupo 3 - Pacientes com depressão persistente (com depressão no momento basal que não melhoraram da depressão na reavaliação)
+
+Grupo 4 - Pacientes não deprimidos no momento basal e deprimidos na realiação\
+
+3.  **Variáveis de Controle:**
+
+**Faixa etária**: 18 a 39, 40 a 59 e maiores de 60 anos
+
+**Sexo**: Masculino e feminino
+
+**IMC**: normal: ≥ 17 a \< 25 kg/m²; sobrepeso: ≥ 25 a \< 30 kg/m²; e obesidade ≥ 30 kg/m²
+
+**Uso de antidepressivos**: Sim e Nao
+
+### Organização do Banco
+
+Baixar banco de pacientes que finalizaram o PADC, selecionar aqueles que finalizaram de modo presencial e manter somentes as variaveis de intesse no banco: melhora intensidade, melhora interferência, melhora depressão, imc e imc cetgorico, idade e idade categorico, sexo e uso de antidepressivos. Ao final, avaliar missing de cada variável.
+
+##FALTA: #FAZER SEXO CATEGORICO E NUMERICO, ONDE M = 0 E F = 1
+
+```{r}
+#| echo: true
+
+banco_dor_presencial <- read.csv("UerjDataCleanv8.csv", sep = ";", dec = ",", header = TRUE)
+head(banco_dor_presencial)
+
+library(dplyr)
+
+banco_dor_presencial <- banco_dor_presencial %>%
+  filter(MODALIDADE_ONLINE == 0)
+
+summary(banco_dor_presencial)
+colnames(banco_dor_presencial)
+
+banco_dor_presencial <- banco_dor_presencial %>%
+  select("codigo", "MODALIDADE_ONLINE", "Sexo", "Raça",
+  "Escolaridade", "EscolariedadeNumerica",
+  "score_HADS_depressao", "score_HADS_ansiedade",
+  "Intensidadedador_B", "Interferenciadador_B",
+  "Peso", "Altura", "IMC", "Antidepressivos",
+  "score_Ansiedade_reavaliacao", "score_depressao_reavaliacao",
+  "Melhora_Intensidade", "melhora_interferencia",
+  "IMC_cat", "IDADE_cat")
+
+summary(banco_dor_presencial)
+
+#FAZER SEXO CATEGORICO E NUMERICO.
+#FAZER TUDO NUMERICO
+#Avaliaçao de missing
+
+
+```
+
+Estimar melhora da depressão, criando variável categorica dos grupos, onde:
+
+Grupo 1 (referencia) - Se score_HADS_depressao e score_depressao_reavaliação \< 11 (sem depressão antes e depois)
+
+Grupo 2 (melhorados) - Se score_HADS_depressao \> 11 e e score_depressao_reavaliação \<11 (com depressão antes e sem depressao depois)
+
+Grupo 3 (deprimidos não melhorados) - Se score_HADS_depressao e score_depressao_reavaliação \> 11 (com depressão antes e depois)
+
+Grupo 4 (piorados) - Se score_HADS_depressao \< 11 e e score_depressao_reavaliação \> 11 (sem depressão antes e com depressao depois)
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
