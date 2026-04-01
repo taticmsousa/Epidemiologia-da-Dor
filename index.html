@@ -146,110 +146,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ol>
 <p><strong>Faixa etária</strong>: 18 a 39, 40 a 59 e maiores de 60 anos</p>
 <p><strong>Sexo</strong>: Masculino e feminino</p>
+<p><strong>Raça</strong>: Branco, Não brando (negro, indígena, amarelo e pardo) e não informado</p>
+<p><strong>Escolaridade</strong>: &lt;9 anos: não estudou e ensino fundamental incompleto; 9-12 anos: fundamento completo e ensino médio incompleto e completo; &gt; 12 anos: ensino superior incompleto e completo.</p>
 <p><strong>IMC</strong>: normal: ≥ 17 a &lt; 25 kg/m²; sobrepeso: ≥ 25 a &lt; 30 kg/m²; e obesidade ≥ 30 kg/m²</p>
 <p><strong>Uso de antidepressivos</strong>: Sim e Nao</p>
 </section>
 <section id="organização-do-banco" class="level3">
 <h3 class="anchored" data-anchor-id="organização-do-banco">Organização do Banco</h3>
-<p>Baixar banco de pacientes que finalizaram o PADC, selecionar aqueles que finalizaram de modo presencial e manter somentes as variaveis de intesse no banco: melhora intensidade, melhora interferência, melhora depressão, imc e imc cetgorico, idade e idade categorico, sexo e uso de antidepressivos. Ao final, avaliar missing de cada variável.</p>
-<p>##FALTA: #FAZER SEXO CATEGORICO E NUMERICO, ONDE M = 0 E F = 1</p>
+<p>Baixar banco de pacientes que finalizaram o PADC, selecionar aqueles que finalizaram de modo presencial e manter somentes as variaveis de intesse no banco: melhora intensidade, melhora interferência, melhora depressão, imc e imc cetgorico, idade e idade categorico, sexo e uso de antidepressivos. Ao final, avaliar missing de cada variável e criar nova variavel IMC_cat, mantendo missing quando necessário. Tambem categorizar variaveis de escolaridade e raça</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"UerjDataCleanv8.csv"</span>, <span class="at">sep =</span> <span class="st">";"</span>, <span class="at">dec =</span> <span class="st">","</span>, <span class="at">header =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(banco_dor_presencial)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  codigo MODALIDADE_ONLINE Sexo    Raça                  Escolaridade
-1    824                 1    F   Pardo Ensino fundamental Incompleto
-2     21                 0    F Amarelo       Ensino médio Incompleto
-3    596                 0    F Amarelo Ensino fundamental Incompleto
-4    188                 0    F Amarelo      Ensino Superior Completo
-5    740                 0    F Amarelo      Ensino Superior Completo
-6    819                 1    F   Pardo         Ensino médio Completo
-  EscolariedadeNumerica score_HADS_depressao score_HADS_ansiedade pior_dor_A
-1                     1                    3                    4          6
-2                     2                   16                   15         10
-3                     1                    7                   10          5
-4                     3                    2                    0         10
-5                     3                   17                   18          8
-6                     2                   14                   18         10
-  fraca_dor_A media_dor_A atual_dor_A PERNAD PERNAE lower_limb Dor_Generalizada
-1           5           5           6      1      0          1                1
-2           5           7          10      1      1          1                0
-3           2           5           0      1      0          1                0
-4          10          10          10      1      1          1                1
-5           5           6           7      1      1          1                1
-6           5          10          10      1      1          1                1
-  DORDECABEÇA DORLOMBAR DORCERVICAL OMBROS JOELHOS Atividadegeral Humor
-1           0         1           0      1       0              4     4
-2           0         1           0      0       1              8    10
-3           0         0           0      0       0             10     3
-4           0         1           0      1       0             10     0
-5           0         1           1      1       1              7    10
-6           1         1           1      1       1              8    10
-  Habilidadedecaminhar Trabalho Relacionamentocomoutraspessoa Sono
-1                    4        4                             0    4
-2                   10       10                             7    8
-3                    0        0                             0    0
-4                   10        0                             0    0
-5                    8       10                            10   10
-6                    5       10                             9    8
-  Habilidadeparaapreciaravida Intensidadedador_B Interferenciadador_B Peso
-1                           4               5.50             3.428571    1
-2                          10               8.00             9.000000   51
-3                          10               3.00             3.285714   56
-4                          10              10.00             4.285714   59
-5                           8               6.50             9.000000   68
-6                           5               8.75             7.857143   48
-  Altura         IMC    PAS PAD   Situaçãotrabalhista Tabagismo Antidepressivos
-1  64.50  0.00024037   1.59 164              DIARISTA                         0
-2   1.53 21.78649237 120.00  80       2- Desempregado       Não               1
-3   1.59 22.15102251 120.00  90          1- Empregado       Não               1
-4   1.59 23.33768443 155.00  76         3- Aposentado       Não               1
-5   1.69 23.80869017 110.00  70 4- Afastado/Benefício       Não               1
-6   1.60 18.75000000  97.00  69 4- Afastado/Benefício       Sim               0
-  Gabapentinóides Benzodiazepinicos AINES Opioides score_Ansiedade_reavaliacao
-1               0                 0     0        0                           4
-2               1                 0     0        0                          14
-3               0                 0     1        0                           5
-4               0                 0     1        0                           3
-5               0                 0     0        0                          16
-6               1                 0     0        0                          20
-  score_depressao_reavaliacao pior_dor_R fraca_dor_R media_dor_R atual_dor_R
-1                           3         10           7           6           4
-2                          11          9           5           9          10
-3                           7          0           0           0           6
-4                           3          8           7           6          10
-5                          17          6           6           7           6
-6                          10         10           8          10          10
-  Atividadegeral_R Humor_R Habilidadedecaminhar_R Trabalho_R BA Sono_R
-1                7       6                     10          8  9      9
-2                7       8                      8         10  5      9
-3                0       0                      0          0  0      0
-4               10       0                     10          3  0      8
-5                8      10                      5          9  8      9
-6                8      10                      7         10 10      8
-  Habilidadeparaapreciaravida_ Intensidadedador_R Interferenciadador_R
-1                            6               6.75             7.857143
-2                            7               8.25             7.714286
-3                            0               1.50             0.000000
-4                            0               7.75             4.428571
-5                            9               6.25             8.285714
-6                           10               9.50             9.000000
-  MODALIDADE_ONLINE.1 TOTALDEDIASDEGRUPO Melhora_Intensidade
-1                   1                  4                1.25
-2                   0                  6                0.25
-3                   0                  6               -1.50
-4                   0                  7               -2.25
-5                   0                  6               -0.25
-6                   1                  7                0.75
-  melhora_interferencia IMC_cat IDADE_cat
-1             4.4285714       1         2
-2            -1.2857143       1         2
-3            -3.2857143       1         2
-4             0.1428571       1         3
-5            -0.7142857       1         2
-6             1.1428571       1         2</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(banco_dor_presencial)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attaching package: 'dplyr'</code></pre>
@@ -264,260 +173,865 @@ Attaching package: 'dplyr'</code></pre>
 
     intersect, setdiff, setequal, union</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial <span class="ot">&lt;-</span> banco_dor_presencial <span class="sc">%&gt;%</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(MODALIDADE_ONLINE <span class="sc">==</span> <span class="dv">0</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(banco_dor_presencial)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     codigo      MODALIDADE_ONLINE     Sexo               Raça          
- Min.   :  1.0   Min.   :0         Length:570         Length:570        
- 1st Qu.:200.2   1st Qu.:0         Class :character   Class :character  
- Median :376.5   Median :0         Mode  :character   Mode  :character  
- Mean   :396.3   Mean   :0                                              
- 3rd Qu.:569.8   3rd Qu.:0                                              
- Max.   :837.0   Max.   :0                                              
-                                                                        
- Escolaridade       EscolariedadeNumerica score_HADS_depressao
- Length:570         Min.   :0.000         Min.   : 0.000      
- Class :character   1st Qu.:1.000         1st Qu.: 7.000      
- Mode  :character   Median :2.000         Median : 9.000      
-                    Mean   :1.667         Mean   : 9.793      
-                    3rd Qu.:2.000         3rd Qu.:13.000      
-                    Max.   :3.000         Max.   :21.000      
-                                                              
- score_HADS_ansiedade   pior_dor_A      fraca_dor_A      media_dor_A    
- Min.   : 0.00        Min.   : 0.000   Min.   : 0.000   Min.   : 0.000  
- 1st Qu.: 8.00        1st Qu.: 7.000   1st Qu.: 3.000   1st Qu.: 5.000  
- Median :12.00        Median : 8.000   Median : 5.000   Median : 7.000  
- Mean   :11.84        Mean   : 8.072   Mean   : 5.046   Mean   : 6.735  
- 3rd Qu.:15.00        3rd Qu.:10.000   3rd Qu.: 7.000   3rd Qu.: 8.000  
- Max.   :21.00        Max.   :10.000   Max.   :10.000   Max.   :10.000  
-                                                                        
-  atual_dor_A         PERNAD           PERNAE         lower_limb    
- Min.   : 0.000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
- 1st Qu.: 5.000   1st Qu.:1.0000   1st Qu.:1.0000   1st Qu.:1.0000  
- Median : 7.000   Median :1.0000   Median :1.0000   Median :1.0000  
- Mean   : 6.788   Mean   :0.7632   Mean   :0.7772   Mean   :0.8789  
- 3rd Qu.: 9.000   3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:1.0000  
- Max.   :10.000   Max.   :1.0000   Max.   :1.0000   Max.   :1.0000  
-                                                                    
- Dor_Generalizada  DORDECABEÇA       DORLOMBAR       DORCERVICAL    
- Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
- 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:1.0000   1st Qu.:0.0000  
- Median :1.0000   Median :0.0000   Median :1.0000   Median :1.0000  
- Mean   :0.5614   Mean   :0.2211   Mean   :0.8509   Mean   :0.5018  
- 3rd Qu.:1.0000   3rd Qu.:0.0000   3rd Qu.:1.0000   3rd Qu.:1.0000  
- Max.   :1.0000   Max.   :1.0000   Max.   :1.0000   Max.   :1.0000  
-                                                                    
-     OMBROS          JOELHOS       Atividadegeral       Humor       
- Min.   :0.0000   Min.   :0.0000   Min.   : 0.000   Min.   : 0.000  
- 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.: 6.000   1st Qu.: 5.000  
- Median :1.0000   Median :1.0000   Median : 8.000   Median : 8.000  
- Mean   :0.5754   Mean   :0.6772   Mean   : 7.428   Mean   : 6.912  
- 3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:10.000   3rd Qu.:10.000  
- Max.   :1.0000   Max.   :1.0000   Max.   :10.000   Max.   :10.000  
-                                                                    
- Habilidadedecaminhar    Trabalho      Relacionamentocomoutraspessoa
- Min.   : 0.000       Min.   : 0.000   Min.   : 0.000               
- 1st Qu.: 6.000       1st Qu.: 7.000   1st Qu.: 0.000               
- Median : 8.000       Median : 9.000   Median : 6.000               
- Mean   : 7.335       Mean   : 7.828   Mean   : 5.311               
- 3rd Qu.:10.000       3rd Qu.:10.000   3rd Qu.: 9.000               
- Max.   :10.000       Max.   :10.000   Max.   :10.000               
-                                                                    
-      Sono        Habilidadeparaapreciaravida Intensidadedador_B
- Min.   : 0.000   Min.   : 0.000              Min.   : 0.000    
- 1st Qu.: 5.000   1st Qu.: 5.000              1st Qu.: 5.500    
- Median : 8.000   Median : 8.000              Median : 6.750    
- Mean   : 6.874   Mean   : 6.619              Mean   : 6.651    
- 3rd Qu.:10.000   3rd Qu.:10.000              3rd Qu.: 8.000    
- Max.   :10.000   Max.   :10.000              Max.   :10.000    
-                                                                
- Interferenciadador_B      Peso            Altura           IMC       
- Min.   : 0.000       Min.   : 42.00   Min.   :1.390   Min.   :17.22  
- 1st Qu.: 5.714       1st Qu.: 65.00   1st Qu.:1.550   1st Qu.:25.55  
- Median : 7.429       Median : 76.00   Median :1.610   Median :29.02  
- Mean   : 6.901       Mean   : 77.98   Mean   :1.621   Mean   :29.65  
- 3rd Qu.: 8.679       3rd Qu.: 88.00   3rd Qu.:1.680   3rd Qu.:32.84  
- Max.   :10.000       Max.   :135.00   Max.   :1.900   Max.   :48.44  
-                      NA's   :69       NA's   :70      NA's   :70     
-      PAS             PAD         Situaçãotrabalhista  Tabagismo        
- Min.   : 88.0   Min.   : 41.00   Length:570          Length:570        
- 1st Qu.:120.0   1st Qu.: 75.00   Class :character    Class :character  
- Median :133.0   Median : 82.00   Mode  :character    Mode  :character  
- Mean   :136.2   Mean   : 83.72                                         
- 3rd Qu.:148.0   3rd Qu.: 90.00                                         
- Max.   :230.0   Max.   :125.00                                         
- NA's   :69      NA's   :69                                             
- Antidepressivos  Gabapentinóides  Benzodiazepinicos     AINES       
- Min.   :0.0000   Min.   :0.0000   Min.   :0.00000   Min.   :0.0000  
- 1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.00000   1st Qu.:0.0000  
- Median :0.0000   Median :0.0000   Median :0.00000   Median :0.0000  
- Mean   :0.3789   Mean   :0.4825   Mean   :0.01579   Mean   :0.3754  
- 3rd Qu.:1.0000   3rd Qu.:1.0000   3rd Qu.:0.00000   3rd Qu.:1.0000  
- Max.   :1.0000   Max.   :1.0000   Max.   :1.00000   Max.   :1.0000  
-                                                                     
-    Opioides       score_Ansiedade_reavaliacao score_depressao_reavaliacao
- Min.   :0.00000   Min.   : 0.000              Min.   : 0.000             
- 1st Qu.:0.00000   1st Qu.: 7.000              1st Qu.: 5.000             
- Median :0.00000   Median :10.000              Median : 9.000             
- Mean   :0.06316   Mean   : 9.961              Mean   : 8.663             
- 3rd Qu.:0.00000   3rd Qu.:13.000              3rd Qu.:12.000             
- Max.   :1.00000   Max.   :21.000              Max.   :21.000             
-                                                                          
-   pior_dor_R      fraca_dor_R      media_dor_R     atual_dor_R    
- Min.   : 0.000   Min.   : 0.000   Min.   : 0.00   Min.   : 0.000  
- 1st Qu.: 6.000   1st Qu.: 3.000   1st Qu.: 5.00   1st Qu.: 4.000  
- Median : 8.000   Median : 5.000   Median : 6.00   Median : 6.000  
- Mean   : 7.196   Mean   : 4.693   Mean   : 6.06   Mean   : 5.796  
- 3rd Qu.: 9.000   3rd Qu.: 6.000   3rd Qu.: 8.00   3rd Qu.: 8.000  
- Max.   :10.000   Max.   :10.000   Max.   :10.00   Max.   :10.000  
-                                                                   
- Atividadegeral_R    Humor_R       Habilidadedecaminhar_R   Trabalho_R    
- Min.   : 0.000   Min.   : 0.000   Min.   : 0.000         Min.   : 0.000  
- 1st Qu.: 4.000   1st Qu.: 4.000   1st Qu.: 4.000         1st Qu.: 4.000  
- Median : 7.000   Median : 6.000   Median : 6.000         Median : 7.000  
- Mean   : 6.304   Mean   : 5.889   Mean   : 5.949         Mean   : 6.409  
- 3rd Qu.: 9.000   3rd Qu.: 8.000   3rd Qu.: 8.000         3rd Qu.: 9.000  
- Max.   :10.000   Max.   :10.000   Max.   :10.000         Max.   :10.000  
-                                                                          
-       BA             Sono_R       Habilidadeparaapreciaravida_
- Min.   : 0.000   Min.   : 0.000   Min.   : 0.000              
- 1st Qu.: 1.000   1st Qu.: 3.000   1st Qu.: 3.000              
- Median : 5.000   Median : 7.000   Median : 6.000              
- Mean   : 4.949   Mean   : 5.912   Mean   : 5.525              
- 3rd Qu.: 8.000   3rd Qu.: 9.000   3rd Qu.: 8.000              
- Max.   :10.000   Max.   :10.000   Max.   :10.000              
-                                                               
- Intensidadedador_R Interferenciadador_R MODALIDADE_ONLINE.1 TOTALDEDIASDEGRUPO
- Min.   : 0.000     Min.   : 0.000       Min.   :0           Min.   :1.000     
- 1st Qu.: 4.750     1st Qu.: 4.286       1st Qu.:0           1st Qu.:5.000     
- Median : 6.000     Median : 6.000       Median :0           Median :6.000     
- Mean   : 5.936     Mean   : 5.848       Mean   :0           Mean   :5.695     
- 3rd Qu.: 7.500     3rd Qu.: 7.964       3rd Qu.:0           3rd Qu.:7.000     
- Max.   :10.000     Max.   :10.000       Max.   :0           Max.   :7.000     
-                                                                               
- Melhora_Intensidade melhora_interferencia    IMC_cat        IDADE_cat   
- Min.   :-7.5000     Min.   :-9.5714       Min.   :0.000   Min.   :1.00  
- 1st Qu.:-2.0000     1st Qu.:-2.4286       1st Qu.:1.000   1st Qu.:2.00  
- Median :-0.7500     Median :-1.0000       Median :2.000   Median :2.00  
- Mean   :-0.7184     Mean   :-1.0547       Mean   :1.565   Mean   :2.34  
- 3rd Qu.: 0.7500     3rd Qu.: 0.4286       3rd Qu.:2.000   3rd Qu.:3.00  
- Max.   : 7.7500     Max.   : 8.7143       Max.   :2.000   Max.   :3.00  
- NA's   :1           NA's   :1                                           </code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial <span class="ot">&lt;-</span> banco_dor_presencial <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(MODALIDADE_ONLINE <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(banco_dor_presencial)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(banco_dor_presencial)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial <span class="ot">&lt;-</span> banco_dor_presencial <span class="sc">%&gt;%</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">"codigo"</span>, <span class="st">"MODALIDADE_ONLINE"</span>, <span class="st">"Sexo"</span>, <span class="st">"Raça"</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Escolaridade"</span>, <span class="st">"EscolariedadeNumerica"</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"score_HADS_depressao"</span>, <span class="st">"score_HADS_ansiedade"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Intensidadedador_B"</span>, <span class="st">"Interferenciadador_B"</span>,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peso"</span>, <span class="st">"Altura"</span>, <span class="st">"IMC"</span>, <span class="st">"Antidepressivos"</span>,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"score_Ansiedade_reavaliacao"</span>, <span class="st">"score_depressao_reavaliacao"</span>,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Melhora_Intensidade"</span>, <span class="st">"melhora_interferencia"</span>,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"IMC_cat"</span>, <span class="st">"IDADE_cat"</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(banco_dor_presencial)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(banco_dor_presencial)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial <span class="ot">&lt;-</span> banco_dor_presencial <span class="sc">%&gt;%</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sexo_cat =</span> <span class="fu">ifelse</span>(Sexo <span class="sc">==</span> <span class="st">"F"</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(banco_dor_presencial)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">#Avaliaçao de missing</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(banco_dor_presencial))</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial <span class="ot">&lt;-</span> banco_dor_presencial <span class="sc">%&gt;%</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>IMC_cat)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">#refazendo variável imc_cat</span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial <span class="ot">&lt;-</span> banco_dor_presencial <span class="sc">%&gt;%</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">imc_cat =</span> <span class="fu">case_when</span>(</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">is.na</span>(IMC) <span class="sc">~</span><span class="cn">NA_real_</span>,</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>    IMC <span class="sc">&gt;=</span> <span class="dv">17</span> <span class="sc">&amp;</span> IMC <span class="sc">&lt;</span> <span class="dv">25</span> <span class="sc">~</span><span class="dv">1</span>, </span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    IMC <span class="sc">&gt;=</span> <span class="dv">25</span> <span class="sc">&amp;</span> IMC <span class="sc">&lt;</span> <span class="dv">30</span> <span class="sc">~</span><span class="dv">2</span>,</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>    IMC <span class="sc">&gt;=</span> <span class="dv">30</span> <span class="sc">~</span><span class="dv">3</span>,</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span><span class="cn">NA_real_</span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="co">#Organizar variaveis de raça e escolaridade </span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(banco_dor_presencial<span class="sc">$</span>Raça)</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial <span class="ot">&lt;-</span> banco_dor_presencial <span class="sc">%&gt;%</span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>    <span class="at">raca_padronizada =</span> Raça <span class="sc">%&gt;%</span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_trim</span>() <span class="sc">%&gt;%</span>                <span class="co"># remove espaços</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_squish</span>() <span class="sc">%&gt;%</span>              <span class="co"># remove espaços duplicados</span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_to_lower</span>(),               <span class="co"># minúsculo</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>    <span class="at">raca_cat =</span> <span class="fu">case_when</span>(</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(raca_padronizada, <span class="st">"^branco$"</span>) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(raca_padronizada, <span class="st">"amarelo|indigena|indígena|negro|pardo"</span>) <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(raca_padronizada, <span class="st">"não informado|nao informado"</span>) <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_real_</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial<span class="sc">$</span>raca_cat <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>  banco_dor_presencial<span class="sc">$</span>raca_cat,</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>),</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Branco"</span>, <span class="st">"Não branco"</span>, <span class="st">"Não informado"</span>)</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(banco_dor_presencial<span class="sc">$</span>raca_cat)</span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(banco_dor_presencial<span class="sc">$</span>Escolaridade)</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial <span class="ot">&lt;-</span> banco_dor_presencial <span class="sc">%&gt;%</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">esc_pad =</span> Escolaridade <span class="sc">%&gt;%</span></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_trim</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_to_lower</span>(),</span>
+<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">escol_cat =</span> <span class="fu">case_when</span>(</span>
+<span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a>      <span class="co"># &lt; 9 anos</span></span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(esc_pad, <span class="st">"nunca estudou|fundamental incompleto"</span>) <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>      <span class="co"># 9–12 anos</span></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(esc_pad, <span class="st">"fundamental completo|médio|medio"</span>) <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb5-83"><a href="#cb5-83" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb5-84"><a href="#cb5-84" aria-hidden="true" tabindex="-1"></a>      <span class="co"># &gt; 12 anos</span></span>
+<span id="cb5-85"><a href="#cb5-85" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(esc_pad, <span class="st">"superior"</span>) <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb5-86"><a href="#cb5-86" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb5-87"><a href="#cb5-87" aria-hidden="true" tabindex="-1"></a>      <span class="co"># não informado</span></span>
+<span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>      <span class="fu">str_detect</span>(esc_pad, <span class="st">"não informado|nao informado"</span>) <span class="sc">~</span> <span class="cn">NA_real_</span>,</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_real_</span></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial<span class="sc">$</span>escol_cat <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a>  banco_dor_presencial<span class="sc">$</span>escol_cat,</span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>),</span>
+<span id="cb5-97"><a href="#cb5-97" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"&lt; 9 anos"</span>, <span class="st">"9–12 anos"</span>, <span class="st">"&gt; 12 anos"</span>)</span>
+<span id="cb5-98"><a href="#cb5-98" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-99"><a href="#cb5-99" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-100"><a href="#cb5-100" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span> (banco_dor_presencial<span class="sc">$</span>escol_cat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(banco_dor_presencial)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] "codigo"                        "MODALIDADE_ONLINE"            
- [3] "Sexo"                          "Raça"                         
- [5] "Escolaridade"                  "EscolariedadeNumerica"        
- [7] "score_HADS_depressao"          "score_HADS_ansiedade"         
- [9] "pior_dor_A"                    "fraca_dor_A"                  
-[11] "media_dor_A"                   "atual_dor_A"                  
-[13] "PERNAD"                        "PERNAE"                       
-[15] "lower_limb"                    "Dor_Generalizada"             
-[17] "DORDECABEÇA"                   "DORLOMBAR"                    
-[19] "DORCERVICAL"                   "OMBROS"                       
-[21] "JOELHOS"                       "Atividadegeral"               
-[23] "Humor"                         "Habilidadedecaminhar"         
-[25] "Trabalho"                      "Relacionamentocomoutraspessoa"
-[27] "Sono"                          "Habilidadeparaapreciaravida"  
-[29] "Intensidadedador_B"            "Interferenciadador_B"         
-[31] "Peso"                          "Altura"                       
-[33] "IMC"                           "PAS"                          
-[35] "PAD"                           "Situaçãotrabalhista"          
-[37] "Tabagismo"                     "Antidepressivos"              
-[39] "Gabapentinóides"               "Benzodiazepinicos"            
-[41] "AINES"                         "Opioides"                     
-[43] "score_Ansiedade_reavaliacao"   "score_depressao_reavaliacao"  
-[45] "pior_dor_R"                    "fraca_dor_R"                  
-[47] "media_dor_R"                   "atual_dor_R"                  
-[49] "Atividadegeral_R"              "Humor_R"                      
-[51] "Habilidadedecaminhar_R"        "Trabalho_R"                   
-[53] "BA"                            "Sono_R"                       
-[55] "Habilidadeparaapreciaravida_"  "Intensidadedador_R"           
-[57] "Interferenciadador_R"          "MODALIDADE_ONLINE.1"          
-[59] "TOTALDEDIASDEGRUPO"            "Melhora_Intensidade"          
-[61] "melhora_interferencia"         "IMC_cat"                      
-[63] "IDADE_cat"                    </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial <span class="ot">&lt;-</span> banco_dor_presencial <span class="sc">%&gt;%</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">"codigo"</span>, <span class="st">"MODALIDADE_ONLINE"</span>, <span class="st">"Sexo"</span>, <span class="st">"Raça"</span>,</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Escolaridade"</span>, <span class="st">"EscolariedadeNumerica"</span>,</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"score_HADS_depressao"</span>, <span class="st">"score_HADS_ansiedade"</span>,</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Intensidadedador_B"</span>, <span class="st">"Interferenciadador_B"</span>,</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Peso"</span>, <span class="st">"Altura"</span>, <span class="st">"IMC"</span>, <span class="st">"Antidepressivos"</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"score_Ansiedade_reavaliacao"</span>, <span class="st">"score_depressao_reavaliacao"</span>,</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Melhora_Intensidade"</span>, <span class="st">"melhora_interferencia"</span>,</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"IMC_cat"</span>, <span class="st">"IDADE_cat"</span>)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(banco_dor_presencial)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     codigo      MODALIDADE_ONLINE     Sexo               Raça          
- Min.   :  1.0   Min.   :0         Length:570         Length:570        
- 1st Qu.:200.2   1st Qu.:0         Class :character   Class :character  
- Median :376.5   Median :0         Mode  :character   Mode  :character  
- Mean   :396.3   Mean   :0                                              
- 3rd Qu.:569.8   3rd Qu.:0                                              
- Max.   :837.0   Max.   :0                                              
-                                                                        
- Escolaridade       EscolariedadeNumerica score_HADS_depressao
- Length:570         Min.   :0.000         Min.   : 0.000      
- Class :character   1st Qu.:1.000         1st Qu.: 7.000      
- Mode  :character   Median :2.000         Median : 9.000      
-                    Mean   :1.667         Mean   : 9.793      
-                    3rd Qu.:2.000         3rd Qu.:13.000      
-                    Max.   :3.000         Max.   :21.000      
-                                                              
- score_HADS_ansiedade Intensidadedador_B Interferenciadador_B      Peso       
- Min.   : 0.00        Min.   : 0.000     Min.   : 0.000       Min.   : 42.00  
- 1st Qu.: 8.00        1st Qu.: 5.500     1st Qu.: 5.714       1st Qu.: 65.00  
- Median :12.00        Median : 6.750     Median : 7.429       Median : 76.00  
- Mean   :11.84        Mean   : 6.651     Mean   : 6.901       Mean   : 77.98  
- 3rd Qu.:15.00        3rd Qu.: 8.000     3rd Qu.: 8.679       3rd Qu.: 88.00  
- Max.   :21.00        Max.   :10.000     Max.   :10.000       Max.   :135.00  
-                                                              NA's   :69      
-     Altura           IMC        Antidepressivos  score_Ansiedade_reavaliacao
- Min.   :1.390   Min.   :17.22   Min.   :0.0000   Min.   : 0.000             
- 1st Qu.:1.550   1st Qu.:25.55   1st Qu.:0.0000   1st Qu.: 7.000             
- Median :1.610   Median :29.02   Median :0.0000   Median :10.000             
- Mean   :1.621   Mean   :29.65   Mean   :0.3789   Mean   : 9.961             
- 3rd Qu.:1.680   3rd Qu.:32.84   3rd Qu.:1.0000   3rd Qu.:13.000             
- Max.   :1.900   Max.   :48.44   Max.   :1.0000   Max.   :21.000             
- NA's   :70      NA's   :70                                                  
- score_depressao_reavaliacao Melhora_Intensidade melhora_interferencia
- Min.   : 0.000              Min.   :-7.5000     Min.   :-9.5714      
- 1st Qu.: 5.000              1st Qu.:-2.0000     1st Qu.:-2.4286      
- Median : 9.000              Median :-0.7500     Median :-1.0000      
- Mean   : 8.663              Mean   :-0.7184     Mean   :-1.0547      
- 3rd Qu.:12.000              3rd Qu.: 0.7500     3rd Qu.: 0.4286      
- Max.   :21.000              Max.   : 7.7500     Max.   : 8.7143      
-                             NA's   :1           NA's   :1            
-    IMC_cat        IDADE_cat   
- Min.   :0.000   Min.   :1.00  
- 1st Qu.:1.000   1st Qu.:2.00  
- Median :2.000   Median :2.00  
- Mean   :1.565   Mean   :2.34  
- 3rd Qu.:2.000   3rd Qu.:3.00  
- Max.   :2.000   Max.   :3.00  
-                               </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#FAZER SEXO CATEGORICO E NUMERICO.</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#FAZER TUDO NUMERICO</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#Avaliaçao de missing</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<p><strong>Variável Melhora da Depreessão</strong></p>
 <p>Estimar melhora da depressão, criando variável categorica dos grupos, onde:</p>
 <p>Grupo 1 (referencia) - Se score_HADS_depressao e score_depressao_reavaliação &lt; 11 (sem depressão antes e depois)</p>
 <p>Grupo 2 (melhorados) - Se score_HADS_depressao &gt; 11 e e score_depressao_reavaliação &lt;11 (com depressão antes e sem depressao depois)</p>
 <p>Grupo 3 (deprimidos não melhorados) - Se score_HADS_depressao e score_depressao_reavaliação &gt; 11 (com depressão antes e depois)</p>
 <p>Grupo 4 (piorados) - Se score_HADS_depressao &lt; 11 e e score_depressao_reavaliação &gt; 11 (sem depressão antes e com depressao depois)</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 4</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(banco_dor_presencial)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial <span class="ot">&lt;-</span> banco_dor_presencial <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">melhora_depressao =</span> <span class="fu">case_when</span>(</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    score_HADS_depressao <span class="sc">&lt;</span> <span class="dv">11</span> <span class="sc">&amp;</span> score_depressao_reavaliacao <span class="sc">&lt;</span> <span class="dv">11</span> <span class="sc">~</span> <span class="dv">1</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    score_HADS_depressao <span class="sc">&gt;=</span> <span class="dv">11</span> <span class="sc">&amp;</span> score_depressao_reavaliacao <span class="sc">&lt;</span> <span class="dv">11</span> <span class="sc">~</span> <span class="dv">2</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    score_HADS_depressao <span class="sc">&gt;=</span> <span class="dv">11</span> <span class="sc">&amp;</span> score_depressao_reavaliacao <span class="sc">&gt;=</span> <span class="dv">11</span> <span class="sc">~</span> <span class="dv">3</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    score_HADS_depressao <span class="sc">&lt;</span> <span class="dv">11</span> <span class="sc">&amp;</span> score_depressao_reavaliacao <span class="sc">&gt;=</span> <span class="dv">11</span> <span class="sc">~</span> <span class="dv">4</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_real_</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial<span class="sc">$</span>melhora_depressao <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  banco_dor_presencial<span class="sc">$</span>melhora_depressao,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>),</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Sem depressão antes/depois"</span>,</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Melhorados"</span>,</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Não melhorados"</span>,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Piorados"</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(banco_dor_presencial<span class="sc">$</span>melhora_depressao)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</div>
-<p>The <code>echo: false</code> option disables the printing of code (only output is displayed).</p>
 </section>
+<section id="tabela-descritiva-sumário" class="level3">
+<h3 class="anchored" data-anchor-id="tabela-descritiva-sumário"><strong>Tabela Descritiva Sumário</strong></h3>
+<p>Organizacao do banco e visualização dos dados para composição das informações descritivas da Tabela 1 do artigo.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#tabela descritiva:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>variaveis <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"IDADE_cat"</span>, <span class="st">"imc_cat"</span>, <span class="st">"sexo_cat"</span>, </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>               <span class="st">"Antidepressivos"</span>, <span class="st">"melhora_depressao"</span>,<span class="st">"escol_cat"</span>, <span class="st">"raca_cat"</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>tabela_descritiva <span class="ot">&lt;-</span> <span class="fu">lapply</span>(variaveis, <span class="cf">function</span>(var) {</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  tab <span class="ot">&lt;-</span> <span class="fu">table</span>(banco_dor_presencial[[var]], <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  prop <span class="ot">&lt;-</span> <span class="fu">prop.table</span>(tab) <span class="sc">*</span> <span class="dv">100</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">Variavel =</span> var,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">Categoria =</span> <span class="fu">names</span>(tab),</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Frequencia =</span> <span class="fu">as.vector</span>(tab),</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">Percentual =</span> <span class="fu">round</span>(<span class="fu">as.vector</span>(prop), <span class="dv">2</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>tabela_descritiva <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, tabela_descritiva)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>tabela_descritiva</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>            Variavel                  Categoria Frequencia Percentual
+1          IDADE_cat                          1         26       4.56
+2          IDADE_cat                          2        324      56.84
+3          IDADE_cat                          3        220      38.60
+4            imc_cat                          1        107      18.77
+5            imc_cat                          2        165      28.95
+6            imc_cat                          3        228      40.00
+7            imc_cat                       &lt;NA&gt;         70      12.28
+8           sexo_cat                          0        127      22.28
+9           sexo_cat                          1        443      77.72
+10   Antidepressivos                          0        354      62.11
+11   Antidepressivos                          1        216      37.89
+12 melhora_depressao Sem depressão antes/depois        266      46.67
+13 melhora_depressao                 Melhorados        106      18.60
+14 melhora_depressao             Não melhorados        134      23.51
+15 melhora_depressao                   Piorados         64      11.23
+16         escol_cat                   &lt; 9 anos        192      33.68
+17         escol_cat                  9–12 anos        294      51.58
+18         escol_cat                  &gt; 12 anos         81      14.21
+19         escol_cat                       &lt;NA&gt;          3       0.53
+20          raca_cat                     Branco        192      33.68
+21          raca_cat                 Não branco        345      60.53
+22          raca_cat              Não informado         33       5.79</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(melhora_depressao, IDADE_cat, raca_cat, escol_cat, imc_cat, sexo_cat, Antidepressivos) <span class="sc">%&gt;%</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div id="ijcasoadag" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ijcasoadag table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ijcasoadag thead, #ijcasoadag tbody, #ijcasoadag tfoot, #ijcasoadag tr, #ijcasoadag td, #ijcasoadag th {
+  border-style: none;
+}
+
+#ijcasoadag p {
+  margin: 0;
+  padding: 0;
+}
+
+#ijcasoadag .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ijcasoadag .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ijcasoadag .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ijcasoadag .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ijcasoadag .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ijcasoadag .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ijcasoadag .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ijcasoadag .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ijcasoadag .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ijcasoadag .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ijcasoadag .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ijcasoadag .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ijcasoadag .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ijcasoadag .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ijcasoadag .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ijcasoadag .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ijcasoadag .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ijcasoadag .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ijcasoadag .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ijcasoadag .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ijcasoadag .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ijcasoadag .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ijcasoadag .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ijcasoadag .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ijcasoadag .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ijcasoadag .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ijcasoadag .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ijcasoadag .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ijcasoadag .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ijcasoadag .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ijcasoadag .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ijcasoadag .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ijcasoadag .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ijcasoadag .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ijcasoadag .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ijcasoadag .gt_left {
+  text-align: left;
+}
+
+#ijcasoadag .gt_center {
+  text-align: center;
+}
+
+#ijcasoadag .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ijcasoadag .gt_font_normal {
+  font-weight: normal;
+}
+
+#ijcasoadag .gt_font_bold {
+  font-weight: bold;
+}
+
+#ijcasoadag .gt_font_italic {
+  font-style: italic;
+}
+
+#ijcasoadag .gt_super {
+  font-size: 65%;
+}
+
+#ijcasoadag .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ijcasoadag .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ijcasoadag .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ijcasoadag .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ijcasoadag .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ijcasoadag .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ijcasoadag .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#ijcasoadag .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ijcasoadag div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="gt_col_headings header">
+<th id="label" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
+<th id="stat_0" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>N = 570</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">melhora_depressao</td>
+<td class="gt_row gt_center" headers="stat_0"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Sem depressão antes/depois</td>
+<td class="gt_row gt_center" headers="stat_0">266 (47%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Melhorados</td>
+<td class="gt_row gt_center" headers="stat_0">106 (19%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Não melhorados</td>
+<td class="gt_row gt_center" headers="stat_0">134 (24%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Piorados</td>
+<td class="gt_row gt_center" headers="stat_0">64 (11%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">IDADE_cat</td>
+<td class="gt_row gt_center" headers="stat_0"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;1</td>
+<td class="gt_row gt_center" headers="stat_0">26 (4.6%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;2</td>
+<td class="gt_row gt_center" headers="stat_0">324 (57%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;3</td>
+<td class="gt_row gt_center" headers="stat_0">220 (39%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">raca_cat</td>
+<td class="gt_row gt_center" headers="stat_0"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Branco</td>
+<td class="gt_row gt_center" headers="stat_0">192 (34%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Não branco</td>
+<td class="gt_row gt_center" headers="stat_0">345 (61%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Não informado</td>
+<td class="gt_row gt_center" headers="stat_0">33 (5.8%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">escol_cat</td>
+<td class="gt_row gt_center" headers="stat_0"><br>
+</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;&lt; 9 anos</td>
+<td class="gt_row gt_center" headers="stat_0">192 (34%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;9–12 anos</td>
+<td class="gt_row gt_center" headers="stat_0">294 (52%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;&gt; 12 anos</td>
+<td class="gt_row gt_center" headers="stat_0">81 (14%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
+<td class="gt_row gt_center" headers="stat_0">3</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">imc_cat</td>
+<td class="gt_row gt_center" headers="stat_0"><br>
+</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;1</td>
+<td class="gt_row gt_center" headers="stat_0">107 (21%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;2</td>
+<td class="gt_row gt_center" headers="stat_0">165 (33%)</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;3</td>
+<td class="gt_row gt_center" headers="stat_0">228 (46%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">&nbsp;&nbsp;&nbsp;&nbsp;Unknown</td>
+<td class="gt_row gt_center" headers="stat_0">70</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_left" headers="label">sexo_cat</td>
+<td class="gt_row gt_center" headers="stat_0">443 (78%)</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_left" headers="label">Antidepressivos</td>
+<td class="gt_row gt_center" headers="stat_0">216 (38%)</td>
+</tr>
+</tbody><tfoot>
+<tr class="gt_footnotes odd">
+<td colspan="2" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> n (%)</td>
+</tr>
+</tfoot>
+
+</table>
+
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Descrição das variáveis no momento pós do grupo de pacientes com depressao (variavel deprimido pos, onde 1 = deprimido e 0 = nao deprimido)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial <span class="ot">&lt;-</span> banco_dor_presencial <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">deprimido_pos =</span> <span class="fu">ifelse</span>(score_depressao_reavaliacao <span class="sc">&gt;=</span> <span class="dv">11</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>banco_dor_presencial<span class="sc">$</span>deprimido_pos <span class="ot">&lt;-</span> <span class="fu">factor</span>(</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  banco_dor_presencial<span class="sc">$</span>deprimido_pos,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Não deprimido"</span>, <span class="st">"Deprimido"</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(banco_dor_presencial<span class="sc">$</span>deprimido_pos)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Não deprimido     Deprimido 
+          372           198 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tab_sex <span class="ot">&lt;-</span> <span class="fu">table</span>(banco_dor_presencial<span class="sc">$</span>deprimido_pos,</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>             banco_dor_presencial<span class="sc">$</span>sexo_cat)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>tab_sex</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               
+                  0   1
+  Não deprimido  89 283
+  Deprimido      38 160</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tab_idade <span class="ot">&lt;-</span> <span class="fu">table</span>(banco_dor_presencial<span class="sc">$</span>deprimido_pos, </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                   banco_dor_presencial<span class="sc">$</span>IDADE_cat)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>tab_idade</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               
+                  1   2   3
+  Não deprimido  15 191 166
+  Deprimido      11 133  54</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>tab_raca <span class="ot">&lt;-</span> <span class="fu">table</span>(banco_dor_presencial<span class="sc">$</span>deprimido_pos,</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                  banco_dor_presencial<span class="sc">$</span>raca_cat, </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>tab_raca</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               
+                Branco Não branco Não informado
+  Não deprimido    123        227            22
+  Deprimido         69        118            11</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>tab_escol <span class="ot">&lt;-</span> <span class="fu">table</span>(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  banco_dor_presencial<span class="sc">$</span>deprimido_pos,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  banco_dor_presencial<span class="sc">$</span>escol_cat,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">useNA =</span> <span class="st">"ifany"</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                   )</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>tab_escol</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               
+                &lt; 9 anos 9–12 anos &gt; 12 anos &lt;NA&gt;
+  Não deprimido      120       193        57    2
+  Deprimido           72       101        24    1</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(tab_escol, <span class="dv">1</span>)<span class="sc">*</span><span class="dv">100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               
+                  &lt; 9 anos  9–12 anos  &gt; 12 anos       &lt;NA&gt;
+  Não deprimido 32.2580645 51.8817204 15.3225806  0.5376344
+  Deprimido     36.3636364 51.0101010 12.1212121  0.5050505</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>tab_imc <span class="ot">&lt;-</span> <span class="fu">table</span> (banco_dor_presencial<span class="sc">$</span>deprimido_pos,</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>                  banco_dor_presencial<span class="sc">$</span>imc_cat,</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">useNA =</span> <span class="st">"ifany"</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>tab_imc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               
+                  1   2   3 &lt;NA&gt;
+  Não deprimido  75 113 137   47
+  Deprimido      32  52  91   23</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.table</span>(tab_imc, <span class="dv">1</span>)<span class="sc">*</span><span class="dv">100</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               
+                       1        2        3     &lt;NA&gt;
+  Não deprimido 20.16129 30.37634 36.82796 12.63441
+  Deprimido     16.16162 26.26263 45.95960 11.61616</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="análises-estatísticas" class="level2">
+<h2 class="anchored" data-anchor-id="análises-estatísticas">Análises Estatísticas</h2>
+<p>Este capítulo se refere às análises estatísticas apresentadas no artigo.</p>
+<ol type="1">
+<li></li>
+</ol>
 </section>
 
 </main>
